@@ -205,3 +205,72 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ============================================
+# Node.js / React / Vite (Client Folder)
+# ============================================
+
+# Logs
+client/logs
+client/*.log
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/pnpm-debug.log*
+client/lerna-debug.log*
+
+# Dependencies
+client/node_modules/
+client/dist/
+client/dist-ssr/
+client/*.local
+
+# Build outputs
+client/build/
+client/*.tsbuildinfo
+
+# Vite
+client/.vite/
+client/vite.config.*.timestamp-*
+
+# Testing
+client/coverage/
+client/*.lcov
+client/.nyc_output/
+
+# Temporary files
+client/*.tmp
+client/*.temp
+client/.cache/
+
+# Optional npm cache directory
+client/.npm/
+
+# Optional eslint cache
+client/.eslintcache
+
+# Optional REPL history
+client/.node_repl_history
+
+# Output of 'npm pack'
+client/*.tgz
+
+# Yarn Integrity file
+client/.yarn-integrity
+
+# parcel-bundler cache
+client/.parcel-cache/
+
+# Next.js (if ever used)
+client/.next/
+client/out/
+
+# Nuxt.js (if ever used)
+client/.nuxt/
+
+# Storybook build outputs
+client/storybook-static/
+
+# Temporary folders
+client/tmp/
+client/temp/
