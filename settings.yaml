@@ -1,0 +1,12 @@
+password_policy:
+  min_length: 10
+  require_uppercase: true
+  require_lowercase: true
+  require_digit: true
+  require_special: true
+  min_categories: 3
+  max_failed_attempts: 3
+
+auth_questions:
+  - "What is your favorite food?"
+  - "What is your mother's name?"
