@@ -9,5 +9,11 @@ class UserCreateResponse(BaseModel):
     email: EmailStr
     message: str
 
+class UserLoginRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=128)
 
-
+class UserChangePasswordRequest(BaseModel):
+    email: EmailStr
+    old_password: str = Field(..., min_length=8, max_length=128)
+    new_password: str = Field(..., min_length=8, max_length=128)
