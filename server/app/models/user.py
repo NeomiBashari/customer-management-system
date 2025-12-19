@@ -8,3 +8,6 @@ class UserCreateResponse(BaseModel):
     id: int
     email: EmailStr
     message: str
+
+
+

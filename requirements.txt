@@ -3,3 +3,4 @@ uvicorn
 pydantic
 PyYAML
 mysql-connector-python
+bleach
