@@ -10,3 +10,8 @@ password_policy:
 auth_questions:
   - "What is your favorite food?"
   - "What is your mother's name?"
+
+database:
+  host: "127.0.0.1"
+  user: "myuser"
+  database: "user_data"
