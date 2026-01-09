@@ -20,18 +20,16 @@ class CustomerController:
         )
      
     def create_customer(self,cust_req: CustomerCreateRequest) -> CustomerCreateRespone:
-        id = sanitize(cust_req.id)
         first_name  = sanitize(cust_req.firstname)
         last_name = sanitize(cust_req.lastname)
         email = sanitize(cust_req.email)
-        phone = sanitize(cust_req.phone)
 
         try:
              conn = self.get_db_connection()
              cursor = conn.cursor()
              cursor.execute(
-                  "INSERT INTO customers (id, firstname, lastname, phone, email) VALUES (%s,%s,%s,%s,%s)",
-                  (id,first_name,last_name,phone,email)
+                  "INSERT INTO customers (id, firstname, lastname, email) VALUES (%s,%s,%s,%s)",
+                  (id,first_name,last_name,email)
              )
              conn.commit()
              user_id = cursor.lastrowid
@@ -46,18 +44,16 @@ class CustomerController:
         return CustomerCreateRespone(res_id=user_id,email=email,message="Customer created successfully")
     
     def create_customer_unvalidated(self,cust_req: CustomerCreateRequest) -> CustomerCreateRespone:
-        id = cust_req.id
         first_name  = cust_req.firstname
         last_name = cust_req.lastname
         email = cust_req.email
-        phone = cust_req.phone
 
         try:
              conn = self.get_db_connection()
              cursor = conn.cursor()
              cursor.execute(
-                  "INSERT INTO customers (id, firstname, lastname, phone, email) VALUES (%s,%s,%s,%s,%s)",
-                  (id,first_name,last_name,phone,email)
+                  "INSERT INTO customers (firstname, lastname, phone, email) VALUES (%s,%s,%s)",
+                  (first_name,last_name,email)
              )
              conn.commit()
              user_id = cursor.lastrowid
