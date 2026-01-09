@@ -1,10 +1,8 @@
 from pydantic import BaseModel, EmailStr, Field
 
 class CustomerCreateRequest(BaseModel):
-    id : str
     firstname : str
     lastname : str
-    phone : str
     email : EmailStr
 
 class CustomerCreateRespone(BaseModel):

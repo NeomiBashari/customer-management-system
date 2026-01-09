@@ -26,7 +26,7 @@ class CustomerRouter:
     @router.post("/{id}/validated", response_model=CustomerGetByIDResponse)
     def create_user(body: CustomerGetByID):
         try:
-            return CustomerRouter.controller.create_customer(body)
+            return CustomerRouter.controller.view_customer(body)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
         
@@ -34,7 +34,24 @@ class CustomerRouter:
     @router.post("/{id}/unvalidated", response_model=CustomerGetByIDResponse)
     def create_user(body: CustomerGetByID):
         try:
+            return CustomerRouter.controller.view_customer_unvalidated(body)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+        
+    @staticmethod
+    @router.post("/all/validated", response_model=CustomerGetByIDResponse)
+    def create_user(body: CustomerGetByID):
+        try:
             return CustomerRouter.controller.create_customer_unvalidated(body)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+    @staticmethod
+    @router.post("/all/unvalidated", response_model=CustomerGetByIDResponse)
+    def create_user(body: CustomerGetByID):
+        try:
+            return CustomerRouter.controller.create_customer_unvalidated(body)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+        
+    
     
