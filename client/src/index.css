@@ -1,0 +1,219 @@
+:root {
+  --color-primary: #007bff;
+  --color-primary-dark: #0056b3;
+  --color-primary-light: #0066cc;
+  --color-secondary: #6c757d;
+  --color-secondary-dark: #545b62;
+  --color-success: #28a745;
+  --color-error: #dc3545;
+  --color-white: #ffffff;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-background: #f5f5f5;
+  --color-background-light: #f9f9f9;
+  --color-border: #dddddd;
+  --color-border-light: #e0e0e0;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-shadow-light: rgba(0, 0, 0, 0.05);
+  --color-shadow-medium: rgba(0, 0, 0, 0.2);
+  --color-blue-light-1: #f0f7ff;
+  --color-blue-light-2: #e6f2ff;
+  --color-blue-light-3: #d0e7ff;
+  --color-blue-light-4: #b3d9ff;
+  --color-white-transparent-1: rgba(255, 255, 255, 0.1);
+  --color-white-transparent-2: rgba(255, 255, 255, 0.2);
+  --color-white-transparent-3: rgba(255, 255, 255, 0.3);
+  --color-white-transparent-9: rgba(255, 255, 255, 0.9);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px var(--color-shadow);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary-dark);
+}
+
+.error {
+  color: var(--color-error);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.success {
+  color: var(--color-success);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.nav {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.nav a {
+  color: var(--color-white);
+  text-decoration: none;
+  margin-right: 20px;
+  font-weight: 500;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  padding: 2rem;
+}
+
+.auth-page .card {
+  max-width: 400px;
+  width: 100%;
+  margin: 0;
+}
+
+.auth-link {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.auth-link a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+
+.mock-credentials {
+  background-color: var(--color-blue-light-1);
+  border: 1px solid var(--color-blue-light-4);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.mock-credentials strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-primary-light);
+}
+
+.credential-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-blue-light-3);
+}
+
+.credential-item:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.credential-item code {
+  background-color: var(--color-blue-light-2);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: var(--color-primary-light);
+}
+

@@ -1,0 +1,66 @@
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+}
+
+.landing-content {
+  text-align: center;
+  color: var(--color-white);
+  padding: 2rem;
+}
+
+.landing-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 3rem;
+  opacity: 0.9;
+}
+
+.auth-options {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.auth-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid var(--color-white);
+  display: inline-block;
+}
+
+.login-button {
+  background-color: var(--color-white);
+  color: var(--color-primary);
+}
+
+.login-button:hover {
+  background-color: var(--color-white-transparent-9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-shadow-medium);
+}
+
+.register-button {
+  background-color: transparent;
+  color: var(--color-white);
+}
+
+.register-button:hover {
+  background-color: var(--color-white-transparent-1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-shadow-medium);
+}
+
