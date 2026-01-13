@@ -13,6 +13,11 @@ class CustomerCreateRespone(BaseModel):
 class CustomerGetByID(BaseModel):
     id: str
 
-class CustomerGetByIDResponse(BaseModel):
-    res_id: int
+class CustomerGetResponse(BaseModel):
+    firstname:str
+    lastname:str
     message: str
+
+class CustomerGetByEmail(BaseModel):
+    email: str
+
