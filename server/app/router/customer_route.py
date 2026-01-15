@@ -9,11 +9,7 @@ class CustomerRouter:
 
     @staticmethod
     @router.post("/create/validated", response_model=CustomerCreateRespone)
-<<<<<<< HEAD
     def create_customer_validated(body: CustomerCreateRequest):
-=======
-    def create_user(body: CustomerCreateRequest):
->>>>>>> 98ff4f1 (added unsecure methods to customers)
         try:
             return CustomerRouter.controller.create_customer_validated(body)
         except Exception as e:
@@ -21,26 +17,13 @@ class CustomerRouter:
         
     @staticmethod
     @router.post("/create/unvalidated", response_model=CustomerCreateRespone)
-<<<<<<< HEAD
     def create_customer_unvalidated(body: CustomerCreateRequest):
-=======
-    def create_user(body: CustomerCreateRequest):
         try:
             return CustomerRouter.controller.create_customer_unvalidated(body)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
         
     @staticmethod
-    @router.post("/{id}/validated", response_model=CustomerGetByIDResponse)
-    def create_user(body: CustomerGetByID):
->>>>>>> 98ff4f1 (added unsecure methods to customers)
-        try:
-            return CustomerRouter.controller.create_customer_unvalidated(body)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
-        
-    @staticmethod
-<<<<<<< HEAD
     @router.post("/{id}/validated", response_model=CustomerGetResponse)
     def view_customer_validated(body: CustomerGetByID):
         try:
@@ -66,12 +49,4 @@ class CustomerRouter:
 
         
     
-=======
-    @router.post("/{id}/unvalidated", response_model=CustomerGetByIDResponse)
-    def create_user(body: CustomerGetByID):
-        try:
-            return CustomerRouter.controller.create_customer_unvalidated(body)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
->>>>>>> 98ff4f1 (added unsecure methods to customers)
     
