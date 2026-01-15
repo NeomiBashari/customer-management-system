@@ -9,12 +9,14 @@ from fastapi import HTTPException
 from datetime import datetime, timedelta
 from email.message import EmailMessage
 
-from models.forgot_user_password import (
+from models.forget_user_password import (
     ForgotPasswordRequest,
     ForgotPasswordResponse,
     ForgotPasswordVerifyRequest,
     ForgotPasswordVerifyResponse,
 )
+from controllers.user_controller import UserController
+from dao.user_dao import UserDAO
 
 
 class ForgotPasswordController:
@@ -22,20 +24,7 @@ class ForgotPasswordController:
         self.email_cfg = self.load_email_settings()
 
     def load_email_settings(self) -> dict:
-        """
-        Optional settings.yaml section you can add:
 
-        email:
-          smtp_host: "smtp.gmail.com"
-          smtp_port: 587
-          smtp_user: "your@gmail.com"
-          smtp_password: "app_password"
-          from_email: "your@gmail.com"
-          use_tls: true
-
-        If missing, we also try env vars:
-        SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_FROM, SMTP_USE_TLS
-        """
         cfg = {}
         try:
             with open("settings.yaml") as f:
@@ -97,11 +86,9 @@ class ForgotPasswordController:
         code_int = int(digest[:8], 16) % 1_000_000
         return f"{code_int:06d}"
 
-    def hash_code_for_storage(self, code: str) -> str:
-        """
-        Store a hash of the code (never store the plain code).
-        """
-        return hashlib.sha256(code.encode()).hexdigest()
+     def hash_code_for_storage(self, code: str) -> str:
+        reset_secret = self.email_cfg.get("reset_secret", "change-me")
+        return self.user_controller.hash_password(code, reset_secret)
 
     def save_code(self, user_id: int, code_hash: str, expires_at: datetime):
         conn = None
@@ -215,7 +202,6 @@ class ForgotPasswordController:
             return ForgotPasswordVerifyResponse(
                 user_id=user_id,
                 verified=True,
-                next_action="change_password",
                 message="Code verified. You can now change your password.",
             )
 
