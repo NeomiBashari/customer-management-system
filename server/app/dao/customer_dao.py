@@ -12,14 +12,13 @@ class DatabaseConnection:
         return cls._instance
 
 
-    #TODO: fix connection to customer database
     @staticmethod
     def _load_settings():
         with open("settings.yaml", "r") as settings_file:
             settings = yaml.safe_load(settings_file)
         with open("secrets.yaml", "r") as secrets_file:
             secrets = yaml.safe_load(secrets_file)
-        return settings["database"], secrets["database_password"]
+        return settings["database_customer"], secrets["database_password"]
 
     @classmethod
     def _create_connection(cls):
