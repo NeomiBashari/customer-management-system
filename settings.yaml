@@ -15,3 +15,10 @@ database:
   host: "127.0.0.1"
   user: "myuser"
   database: "user_data"
+
+  database_customer:
+  host: "127.0.0.1"
+  user: "myuser"
+  database: "customer_data"
+
+  
