@@ -16,9 +16,13 @@ database:
   user: "myuser"
   database: "user_data"
 
-  database_customer:
+email_settings:
+  smtp_host: smtp.gmail.com
+  smtp_port: 587 # 465 for SSL
+  sender_email: neomibashari1899@gmail.com
+  reset_password_url_template: "http://localhost:5173/reset-password?token={token}"
+
+database_customer:
   host: "127.0.0.1"
   user: "myuser"
   database: "customer_data"
-
-  
