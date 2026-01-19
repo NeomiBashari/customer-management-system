@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from models.user import UserCreateRequest, UserCreateResponse, UserLoginRequest, UserChangePasswordRequest
+from models.user import UserCreateRequest, UserCreateResponse, UserLoginRequest, UserChangePasswordRequest, ForgotPasswordRequest
+
 from controllers.user_controller import UserController
 
 class UserRouter:
@@ -51,5 +52,37 @@ class UserRouter:
     def change_password_without_validation(email: str, old_password: str, new_password: str):
         try:
             return UserRouter.controller.change_password_without_validation(email, old_password, new_password)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    @router.post("/forgot-password/validated")
+    def forgot_password_validated(body: ForgotPasswordRequest):
+        try:
+            return UserRouter.controller.initiate_forgot_password_validated(body.email)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    @router.post("/forgot-password/unvalidated")
+    def forgot_password_unvalidated(body: ForgotPasswordRequest):
+        try:
+            return UserRouter.controller.initiate_forgot_password_unvalidated(body.email)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    @router.post("/reset-password/validated")
+    def reset_password_validated(body: UserChangePasswordRequest):
+        try:
+            return UserRouter.controller.reset_password_validated(body.email, body.old_password, body.new_password)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    @router.post("/reset-password/unvalidated")
+    def reset_password_unvalidated(body: UserChangePasswordRequest):
+        try:
+            return UserRouter.controller.reset_password_unvalidated(body.email, body.old_password, body.new_password)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))

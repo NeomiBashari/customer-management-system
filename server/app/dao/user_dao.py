@@ -1,6 +1,7 @@
 import yaml
 import mysql.connector
 from mysql.connector import Error
+from datetime import datetime
 
 class DatabaseConnection:
     _instance = None
@@ -70,12 +71,45 @@ class UserDAO:
             if cursor:
                 cursor.close()
 
-    def update_user_password(self, email: str, password_hash: str, salt: str) -> None:
+    def update_user_password(self, email: str, password_hash: str, salt: str):
         try:
             cursor = self.db.cursor()
             cursor.execute(
                 "UPDATE users SET password_hash = %s, salt = %s WHERE email = %s",
                 (password_hash, salt, email)
+            )
+            self.db.commit()
+        except Error as e:
+            print(f"MySQL Error: {e}")
+            raise
+        finally:
+            if cursor:
+                cursor.close()
+
+    def get_password_reset_token(self, token_hash: str) -> dict:
+        try:
+            cursor = self.db.cursor(dictionary=True)
+            cursor.execute(
+                """
+                SELECT user.email
+                FROM users user ON user.password_hash = %s
+                """,
+                (token_hash,)
+            )
+            return cursor.fetchone()
+        except Error as e:
+            print(f"MySQL Error: {e}")
+            raise
+        finally:
+            if cursor:
+                cursor.close()
+
+    def invalidate_password_reset_token(self, token_hash: str) -> None:
+        try:
+            cursor = self.db.cursor()
+            cursor.execute(
+                "UPDATE password_reset_tokens SET used = TRUE WHERE token_hash = %s",
+                (token_hash,)
             )
             self.db.commit()
         except Error as e:
