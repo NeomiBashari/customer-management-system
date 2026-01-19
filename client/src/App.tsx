@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ApiModeProvider } from './contexts/ApiModeContext';
 import Landing from './pages/Landing/Landing';
 import Register from './pages/Register';
 import Login from './pages/Login';
@@ -76,13 +77,15 @@ function AppRoutes() {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <AppRoutes />
-        </div>
-      </Router>
-    </AuthProvider>
+    <ApiModeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="App">
+            <AppRoutes />
+          </div>
+        </Router>
+      </AuthProvider>
+    </ApiModeProvider>
   );
 }
 

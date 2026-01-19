@@ -6,6 +6,7 @@ import { validatePassword, getPasswordRequirements } from '../utils/passwordVali
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
+    email: '',
     token: '',
     newPassword: '',
   });
@@ -15,7 +16,7 @@ const ResetPassword = () => {
   useEffect(() => {
     const token = searchParams.get('token');
     if (token) {
-      setFormData({ ...formData, token });
+      setFormData((prev) => ({ ...prev, token }));
     }
   }, [searchParams]);
 
@@ -23,6 +24,11 @@ const ResetPassword = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (!formData.email) {
+      setError('Email is required');
+      return;
+    }
 
     const validation = validatePassword(formData.newPassword);
     if (!validation.isValid) {
@@ -33,7 +39,7 @@ const ResetPassword = () => {
     try {
       const response = await authApi.resetPassword(formData);
       setSuccess(response.message || 'Password reset successfully!');
-      setFormData({ token: '', newPassword: '' });
+      setFormData({ email: '', token: '', newPassword: '' });
     } catch (err: any) {
       setError(err.response?.data?.error || 'Password reset failed');
     }
@@ -44,14 +50,24 @@ const ResetPassword = () => {
       <h2>Reset Password</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Reset Token:</label>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
+          />
+          <small>Enter your account email address</small>
+        </div>
+        <div className="form-group">
+          <label>Temporary Password / Reset Token:</label>
           <input
             type="text"
             value={formData.token}
             onChange={(e) => setFormData({ ...formData, token: e.target.value })}
             required
           />
-          <small>Enter the token you received via email</small>
+          <small>Enter the temporary password you received via email</small>
         </div>
         <div className="form-group">
           <label>New Password:</label>
@@ -72,4 +88,3 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
-
