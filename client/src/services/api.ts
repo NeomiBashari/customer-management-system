@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { mockAuthApi, mockCustomerApi } from './mockData';
+import { getRouteMode } from '../contexts/ApiModeContext';
 
 const USE_MOCKS = false;
 
@@ -40,6 +41,7 @@ export interface ForgotPasswordData {
 }
 
 export interface ResetPasswordData {
+  email: string;
   token: string;
   newPassword: string;
 }
@@ -55,7 +57,8 @@ export const authApi = {
     if (USE_MOCKS) {
       return await mockAuthApi.register(data);
     }
-    const response = await api.post('/users/create/validated', {
+    const mode = getRouteMode();
+    const response = await api.post(`/users/create/${mode}`, {
       email: data.email,
       password: data.password,
     });
@@ -72,7 +75,8 @@ export const authApi = {
     if (USE_MOCKS) {
       return await mockAuthApi.login(data);
     }
-    const response = await api.post('/users/login/validated', {
+    const mode = getRouteMode();
+    const response = await api.post(`/users/login/${mode}`, {
       email: data.username,
       password: data.password,
     });
@@ -89,7 +93,8 @@ export const authApi = {
     if (USE_MOCKS) {
       return await mockAuthApi.changePassword(data);
     }
-    const response = await api.put('/users/change-password/validated', {
+    const mode = getRouteMode();
+    const response = await api.put(`/users/change-password/${mode}`, {
       email: data.userId.toString(),
       old_password: data.currentPassword,
       new_password: data.newPassword,
@@ -101,7 +106,8 @@ export const authApi = {
     if (USE_MOCKS) {
       return await mockAuthApi.forgotPassword(data);
     }
-    const response = await api.post('/users/forgot-password/validated', data);
+    const mode = getRouteMode();
+    const response = await api.post(`/users/forgot-password/${mode}`, data);
     return response.data;
   },
 
@@ -109,9 +115,10 @@ export const authApi = {
     if (USE_MOCKS) {
       return await mockAuthApi.resetPassword(data);
     }
-    const response = await api.post('/users/reset-password/validated', {
-      email: data.token,
-      old_password: '',
+    const mode = getRouteMode();
+    const response = await api.post(`/users/reset-password/${mode}`, {
+      email: data.email,
+      old_password: data.token,
       new_password: data.newPassword,
     });
     return response.data;
@@ -123,7 +130,8 @@ export const customerApi = {
     if (USE_MOCKS) {
       return await mockCustomerApi.create(data);
     }
-    const response = await api.post('/customers/create/validated', data);
+    const mode = getRouteMode();
+    const response = await api.post(`/customers/create/${mode}`, data);
     return response.data;
   },
 
@@ -131,6 +139,7 @@ export const customerApi = {
     if (USE_MOCKS) {
       return await mockCustomerApi.getAll();
     }
+    // Note: /customers/all has no unvalidated variant, always uses base endpoint
     const response = await api.post('/customers/all');
     return response.data;
   },
@@ -139,7 +148,8 @@ export const customerApi = {
     if (USE_MOCKS) {
       return await mockCustomerApi.getById(id);
     }
-    const response = await api.post(`/customers/${id}/validated`, { id: id.toString() });
+    const mode = getRouteMode();
+    const response = await api.post(`/customers/${id}/${mode}`, { id: id.toString() });
     return {
       id: response.data.res_id || id,
       name: `${response.data.firstname} ${response.data.lastname}`,
@@ -159,4 +169,3 @@ export const customerApi = {
     );
   },
 };
-
