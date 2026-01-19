@@ -14,7 +14,7 @@ auth_questions:
 database:
   host: "127.0.0.1"
   user: "myuser"
-  database: "user_data"
+  database: "mydatabase"
 
 email_settings:
   smtp_host: smtp.gmail.com
