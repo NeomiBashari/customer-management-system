@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { mockAuthApi, mockCustomerApi } from './mockData';
 
-const USE_MOCKS = true;
+const USE_MOCKS = false;
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'http://localhost:8000';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -16,6 +16,12 @@ export interface RegisterData {
   username: string;
   email: string;
   password: string;
+}
+
+export interface UserResponse {
+  id: number;
+  email: string;
+  message: string;
 }
 
 export interface LoginData {
@@ -39,12 +45,9 @@ export interface ResetPasswordData {
 }
 
 export interface CustomerData {
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  phone: string;
-  address: string;
-  sector: string;
-  packageId: number;
 }
 
 export const authApi = {
@@ -52,23 +55,45 @@ export const authApi = {
     if (USE_MOCKS) {
       return await mockAuthApi.register(data);
     }
-    const response = await api.post('/auth/register', data);
-    return response.data;
+    const response = await api.post('/users/create/validated', {
+      email: data.email,
+      password: data.password,
+    });
+    return {
+      user: {
+        id: response.data.id,
+        username: data.username,
+        email: response.data.email,
+      },
+    };
   },
 
   login: async (data: LoginData) => {
     if (USE_MOCKS) {
       return await mockAuthApi.login(data);
     }
-    const response = await api.post('/auth/login', data);
-    return response.data;
+    const response = await api.post('/users/login/validated', {
+      email: data.username,
+      password: data.password,
+    });
+    return {
+      user: {
+        id: response.data.id || 1,
+        username: data.username,
+        email: response.data.email || data.username,
+      },
+    };
   },
 
   changePassword: async (data: ChangePasswordData) => {
     if (USE_MOCKS) {
       return await mockAuthApi.changePassword(data);
     }
-    const response = await api.post('/auth/change-password', data);
+    const response = await api.put('/users/change-password/validated', {
+      email: data.userId.toString(),
+      old_password: data.currentPassword,
+      new_password: data.newPassword,
+    });
     return response.data;
   },
 
@@ -76,7 +101,7 @@ export const authApi = {
     if (USE_MOCKS) {
       return await mockAuthApi.forgotPassword(data);
     }
-    const response = await api.post('/auth/forgot-password', data);
+    const response = await api.post('/users/forgot-password/validated', data);
     return response.data;
   },
 
@@ -84,7 +109,11 @@ export const authApi = {
     if (USE_MOCKS) {
       return await mockAuthApi.resetPassword(data);
     }
-    const response = await api.post('/auth/reset-password', data);
+    const response = await api.post('/users/reset-password/validated', {
+      email: data.token,
+      old_password: '',
+      new_password: data.newPassword,
+    });
     return response.data;
   },
 };
@@ -94,7 +123,7 @@ export const customerApi = {
     if (USE_MOCKS) {
       return await mockCustomerApi.create(data);
     }
-    const response = await api.post('/customers', data);
+    const response = await api.post('/customers/create/validated', data);
     return response.data;
   },
 
@@ -102,7 +131,7 @@ export const customerApi = {
     if (USE_MOCKS) {
       return await mockCustomerApi.getAll();
     }
-    const response = await api.get('/customers');
+    const response = await api.post('/customers/all');
     return response.data;
   },
 
@@ -110,16 +139,24 @@ export const customerApi = {
     if (USE_MOCKS) {
       return await mockCustomerApi.getById(id);
     }
-    const response = await api.get(`/customers/${id}`);
-    return response.data;
+    const response = await api.post(`/customers/${id}/validated`, { id: id.toString() });
+    return {
+      id: response.data.res_id || id,
+      name: `${response.data.firstname} ${response.data.lastname}`,
+      email: response.data.email,
+      firstname: response.data.firstname,
+      lastname: response.data.lastname,
+    };
   },
 
   searchByName: async (name: string) => {
     if (USE_MOCKS) {
       return await mockCustomerApi.searchByName(name);
     }
-    const response = await api.get(`/customers/search/${name}`);
-    return response.data;
+    const allCustomers = await api.post('/customers/all');
+    return allCustomers.data.filter((c: any) =>
+      `${c.firstname} ${c.lastname}`.toLowerCase().includes(name.toLowerCase())
+    );
   },
 };
 

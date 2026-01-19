@@ -13,12 +13,9 @@ export interface MockUser {
 
 export interface MockCustomer {
   id: number;
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  phone: string;
-  address: string;
-  sector: string;
-  packageId: number;
 }
 
 export const mockUsers: MockUser[] = [
@@ -51,21 +48,15 @@ export const mockUsers: MockUser[] = [
 export const mockCustomers: MockCustomer[] = [
   {
     id: 1,
-    name: 'Acme Corporation',
+    firstname: 'Acme',
+    lastname: 'Corporation',
     email: 'contact@acme.com',
-    phone: '+1-555-0101',
-    address: '123 Business St, New York, NY 10001',
-    sector: 'Technology',
-    packageId: 3,
   },
   {
     id: 2,
-    name: 'Global Industries',
+    firstname: 'Global',
+    lastname: 'Industries',
     email: 'info@global.com',
-    phone: '+1-555-0102',
-    address: '456 Commerce Ave, Los Angeles, CA 90001',
-    sector: 'Manufacturing',
-    packageId: 2,
   },
 ];
 
@@ -258,12 +249,9 @@ let customerIdCounter = mockCustomers.length + 1;
 
 export const mockCustomerApi = {
   create: async (data: {
-    name: string;
+    firstname: string;
+    lastname: string;
     email: string;
-    phone: string;
-    address: string;
-    sector: string;
-    packageId: number;
   }) => {
     await delay(500);
 
@@ -300,7 +288,7 @@ export const mockCustomerApi = {
   searchByName: async (name: string) => {
     await delay(300);
     return mockCustomers.filter((c) =>
-      c.name.toLowerCase().includes(name.toLowerCase())
+      `${c.firstname} ${c.lastname}`.toLowerCase().includes(name.toLowerCase())
     );
   },
 };

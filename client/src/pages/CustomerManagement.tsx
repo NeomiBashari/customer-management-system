@@ -3,22 +3,17 @@ import { customerApi } from '../services/api';
 
 interface Customer {
   id: number;
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  phone: string;
-  address: string;
-  sector: string;
-  packageId: number;
+  name?: string;
 }
 
 const CustomerManagement = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstname: '',
+    lastname: '',
     email: '',
-    phone: '',
-    address: '',
-    sector: '',
-    packageId: 1,
   });
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [error, setError] = useState('');
@@ -45,15 +40,13 @@ const CustomerManagement = () => {
 
     try {
       const response = await customerApi.create(formData);
-      setSuccess(`Customer "${response.customer.name}" created successfully!`);
-      setNewCustomerName(response.customer.name);
+      const customerName = `${response.firstname || formData.firstname} ${response.lastname || formData.lastname}`;
+      setSuccess(`Customer "${customerName}" created successfully!`);
+      setNewCustomerName(customerName);
       setFormData({
-        name: '',
+        firstname: '',
+        lastname: '',
         email: '',
-        phone: '',
-        address: '',
-        sector: '',
-        packageId: 1,
       });
       loadCustomers();
     } catch (err: any) {
@@ -67,11 +60,20 @@ const CustomerManagement = () => {
         <h2>Add New Customer</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Name:</label>
+            <label>First Name:</label>
             <input
               type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              value={formData.firstname}
+              onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Last Name:</label>
+            <input
+              type="text"
+              value={formData.lastname}
+              onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
               required
             />
           </div>
@@ -83,45 +85,6 @@ const CustomerManagement = () => {
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
-          </div>
-          <div className="form-group">
-            <label>Phone:</label>
-            <input
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Address:</label>
-            <textarea
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Sector:</label>
-            <input
-              type="text"
-              value={formData.sector}
-              onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Package ID:</label>
-            <select
-              value={formData.packageId}
-              onChange={(e) => setFormData({ ...formData, packageId: parseInt(e.target.value) })}
-              required
-            >
-              <option value={1}>1 - Basic</option>
-              <option value={2}>2 - Standard</option>
-              <option value={3}>3 - Premium</option>
-              <option value={4}>4 - Ultra</option>
-            </select>
           </div>
           {error && <div className="error">{error}</div>}
           {success && <div className="success">{success}</div>}
@@ -143,22 +106,18 @@ const CustomerManagement = () => {
             <thead>
               <tr style={{ borderBottom: '2px solid #ddd' }}>
                 <th style={{ padding: '8px', textAlign: 'left' }}>ID</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Name</th>
+                <th style={{ padding: '8px', textAlign: 'left' }}>First Name</th>
+                <th style={{ padding: '8px', textAlign: 'left' }}>Last Name</th>
                 <th style={{ padding: '8px', textAlign: 'left' }}>Email</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Phone</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Sector</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Package</th>
               </tr>
             </thead>
             <tbody>
               {customers.map((customer) => (
                 <tr key={customer.id} style={{ borderBottom: '1px solid #ddd' }}>
                   <td style={{ padding: '8px' }}>{customer.id}</td>
-                  <td style={{ padding: '8px' }}>{customer.name}</td>
+                  <td style={{ padding: '8px' }}>{customer.firstname}</td>
+                  <td style={{ padding: '8px' }}>{customer.lastname}</td>
                   <td style={{ padding: '8px' }}>{customer.email}</td>
-                  <td style={{ padding: '8px' }}>{customer.phone}</td>
-                  <td style={{ padding: '8px' }}>{customer.sector}</td>
-                  <td style={{ padding: '8px' }}>{customer.packageId}</td>
                 </tr>
               ))}
             </tbody>
