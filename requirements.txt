@@ -4,3 +4,4 @@ pydantic
 email-validator
 PyYAML
 mysql-connector-python
+bleach
