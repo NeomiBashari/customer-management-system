@@ -12,9 +12,7 @@ def sanitize(str):
 
 class CustomerController:
      def __init__(self):
-        self.dao = CustomerDAO()
-        self.policy = self.load_password_policy()
-    
+        self.dao = CustomerDAO()    
      
      def create_customer_validated(self,cust_req: CustomerCreateRequest) -> CustomerCreateRespone:
         first_name  = sanitize(cust_req.firstname)
