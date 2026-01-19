@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
-from models.customers import CustomerCreateRespone, CustomerCreateRequest,CustomerGetByID,CustomerGetByEmail,CustomerGetResponse
+from models.customers import CustomerCreateRespone, CustomerCreateRequest,CustomerGetByID,CustomerGetResponse, CustomerAllResponse
 from controllers.customer_controller import CustomerController
 
 class CustomerRouter:
@@ -40,7 +40,7 @@ class CustomerRouter:
             raise HTTPException(status_code=500, detail=str(e))
         
     @staticmethod
-    @router.post("/all", response_model=List[CustomerCreateRespone])
+    @router.post("/all", response_model=List[CustomerAllResponse])
     def view_all_customers():
         try:
             return CustomerRouter.controller.view_all_customers()

@@ -18,6 +18,9 @@ class CustomerGetResponse(BaseModel):
     lastname:str
     message: str
 
-class CustomerGetByEmail(BaseModel):
-    email: str
+class CustomerAllResponse(BaseModel):
+    id: int
+    firstname: str
+    lastname: str
+    email : EmailStr
 
