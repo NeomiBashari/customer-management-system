@@ -7,10 +7,6 @@ password_policy:
   min_categories: 3
   max_failed_attempts: 3
 
-auth_questions:
-  - "What is your favorite food?"
-  - "What is your mother's name?"
-
 database:
   host: "127.0.0.1"
   user: "myuser"
