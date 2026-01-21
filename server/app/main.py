@@ -5,6 +5,7 @@ from router.user_router import UserRouter
 from router.customer_route import CustomerRouter
 
 app = FastAPI()
+
 app.include_router(UserRouter.router)
 app.include_router(CustomerRouter.router)
 

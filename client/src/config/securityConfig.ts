@@ -17,7 +17,7 @@ export const securityConfig: SecurityConfig = {
   passwordRequireNumbers: true,
   passwordRequireSpecialChars: true,
   passwordHistoryCount: 3,
-  preventDictionaryWords: true, // Uses zxcvbn library
+  preventDictionaryWords: true, 
   maxLoginAttempts: 3,
   lockoutDurationMinutes: 15,
 };

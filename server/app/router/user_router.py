@@ -1,7 +1,11 @@
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 from models.user import UserCreateRequest, UserCreateResponse, UserLoginRequest, UserChangePasswordRequest, ForgotPasswordRequest
-
 from controllers.user_controller import UserController
+
+class UnvalidatedLoginRequest(BaseModel):
+    email: str
+    password: str
 
 class UserRouter:
     controller = UserController()
@@ -28,14 +32,18 @@ class UserRouter:
     def login_with_validation(body: UserLoginRequest):
         try:
             return UserRouter.controller.login(body.email, body.password)
+        except HTTPException:
+            raise
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
     @staticmethod
     @router.post("/login/unvalidated")
-    def login_without_validation(email: str, password: str):
+    def login_without_validation(body: UnvalidatedLoginRequest):
         try:
-            return UserRouter.controller.login(email, password)
+            return UserRouter.controller.login_vulnerable(body.email, body.password)
+        except HTTPException:
+            raise
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     
@@ -49,9 +57,9 @@ class UserRouter:
 
     @staticmethod
     @router.put("/change-password/unvalidated")
-    def change_password_without_validation(email: str, old_password: str, new_password: str):
+    def change_password_without_validation(body: UserChangePasswordRequest):
         try:
-            return UserRouter.controller.change_password_without_validation(email, old_password, new_password)
+            return UserRouter.controller.change_password_without_validation(body.email, body.old_password, body.new_password)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 

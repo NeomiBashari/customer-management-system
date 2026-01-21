@@ -1,3 +1,4 @@
+from mysql.connector import Error
 from .db_connection import DatabaseConnection
 
 class UserDAO:
@@ -14,7 +15,6 @@ class UserDAO:
             db.commit()
             return cursor.lastrowid
         except Error as e:
-            print(f"MySQL Error: {e}")
             raise
         finally:
             if cursor:
@@ -29,9 +29,27 @@ class UserDAO:
             db = DatabaseConnection.get_connection()
             cursor = db.cursor(dictionary=True, buffered=True)
             cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-            return cursor.fetchone()
+            result = cursor.fetchone()
+            return result
         except Error as e:
-            print(f"MySQL Error: {e}")
+            raise
+        finally:
+            if cursor:
+                cursor.close()
+            if db:
+                db.close()
+
+    def get_user_by_email_vulnerable(self, email: str) -> dict:
+        db = None
+        cursor = None
+        try:
+            db = DatabaseConnection.get_connection()
+            cursor = db.cursor(dictionary=True, buffered=True)
+            query = f"SELECT * FROM users WHERE email = '{email}'"
+            cursor.execute(query)
+            result = cursor.fetchone()
+            return result
+        except Error as e:
             raise
         finally:
             if cursor:
@@ -51,7 +69,6 @@ class UserDAO:
             )
             db.commit()
         except Error as e:
-            print(f"MySQL Error: {e}")
             raise
         finally:
             if cursor:
@@ -74,7 +91,6 @@ class UserDAO:
             )
             return cursor.fetchone()
         except Error as e:
-            print(f"MySQL Error: {e}")
             raise
         finally:
             if cursor:
@@ -94,7 +110,6 @@ class UserDAO:
             )
             db.commit()
         except Error as e:
-            print(f"MySQL Error: {e}")
             raise
         finally:
             if cursor:

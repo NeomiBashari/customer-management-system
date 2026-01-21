@@ -52,6 +52,20 @@ const Register = () => {
           </button>
         </div>
         <h2>Register New User</h2>
+        <div className="mock-credentials">
+          <strong>Valid Example Credentials:</strong>
+          <div className="credential-item">
+            <span>Email: <code>test@example.com</code></span>
+            <span>Password: <code>TestPass123!@#</code></span>
+          </div>
+          <div className="credential-item">
+            <span>Email: <code>user@demo.com</code></span>
+            <span>Password: <code>MySecure1!Pass</code></span>
+          </div>
+          <small style={{ display: 'block', marginTop: '0.5rem', color: '#666' }}>
+            Password must be at least 10 characters with uppercase, lowercase, numbers, and special characters
+          </small>
+        </div>
         <form onSubmit={handleSubmit} noValidate={!isValidated}>
 
           <div className="form-group">

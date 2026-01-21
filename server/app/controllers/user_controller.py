@@ -25,16 +25,14 @@ class UserController:
             with open("settings.yaml", "r") as f:
                 settings = yaml.safe_load(f)
             with open("secrets.yaml", "r") as f:
-                secrets = yaml.safe_load(f)
+                secrets_data = yaml.safe_load(f)
         except FileNotFoundError as e:
-            print(f"Configuration file not found: {e}")
             return {}
         except yaml.YAMLError as e:
-            print(f"Error parsing YAML file: {e}")
             return {}
 
         email_settings = settings.get("email_settings", {})
-        email_settings["email_password"] = secrets.get("email_password") 
+        email_settings["email_password"] = secrets_data.get("email_password") 
         return email_settings
 
     def validate_password(self, password: str) -> bool:
@@ -94,8 +92,23 @@ class UserController:
                 raise HTTPException(status_code=401, detail="Invalid email or password")
 
             return {"message": "Login successful"}
+        except HTTPException:
+            raise
         except Exception as e:
-            raise HTTPException(status_code=500, detail="Internal server error")
+            raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+    def login_vulnerable(self, email: str, password: str) -> dict:
+        try:
+            user = self.dao.get_user_by_email_vulnerable(email)
+
+            if not user:
+                raise HTTPException(status_code=401, detail="Invalid email or password")
+
+            return {"message": "Login successful", "user": {"id": user.get("id"), "email": user.get("email")}}
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
     def change_password_with_validation(self, email: str, old_password: str, new_password: str) -> dict:
         user = self.dao.get_user_by_email(email)
@@ -137,7 +150,6 @@ class UserController:
         email_password = self.email_config.get("email_password")
 
         if not all([smtp_host, smtp_port, sender_email, email_password]):
-            print("Email configuration is incomplete. Cannot send temporary password email.")
             return False
 
         subject = "Your Temporary Password"
@@ -165,25 +177,13 @@ class UserController:
                 server.starttls()
                 server.login(sender_email, email_password)
                 server.sendmail(sender_email, recipient_email, msg.as_string())
-            print(f"Temporary password email sent to {recipient_email}")
             return True
-        except smtplib.SMTPAuthenticationError as e:
-            print(f"SMTP Authentication Error: Check username/password for {sender_email}. Error: {e}")
-            return False
-        except smtplib.SMTPServerDisconnected as e:
-            print(f"SMTP Server Disconnected. Check host/port or network connectivity. Error: {e}")
-            return False
-        except smtplib.SMTPException as e:
-            print(f"General SMTP Error sending email to {recipient_email}: {e}")
-            return False
         except Exception as e:
-            print(f"Unexpected error sending email to {recipient_email}: {e}")
             return False
 
     def initiate_forgot_password_validated(self, email: str) -> dict:
         user = self.dao.get_user_by_email(email)
         if not user:
-            print(f"Attempted forgot password for non-existent email: {email}")
             return {"message": "If an account with that email exists, a temporary password has been sent."}
 
         temporary_password = secrets.token_urlsafe(16)
@@ -192,15 +192,9 @@ class UserController:
 
         try:
             self.dao.update_user_password(user["email"], temporary_password_hash, new_salt)
-
-            email_sent = self._send_temporary_password_email(user["email"], temporary_password)
-            
-            if not email_sent:
-                print(f"Failed to send temporary password email for {user['email']}. Check logs for details.")
-
+            self._send_temporary_password_email(user["email"], temporary_password)
             return {"message": "If an account with that email exists, a temporary password has been sent."}
         except Exception as e:
-            print(f"Error initiating temporary password for {email}: {e}")
             raise HTTPException(status_code=500, detail="Internal server error")
             
     def initiate_forgot_password_unvalidated(self, email: str) -> dict:
@@ -213,15 +207,10 @@ class UserController:
         try:
             if user:
                 self.dao.update_user_password(email, temporary_password_hash, new_salt)
-                email_sent = self._send_temporary_password_email(email, temporary_password)
-                if not email_sent:
-                    print(f"UNVALIDATED: Failed to send temporary password email for {email}.")
-            else:
-                print(f"UNVALIDATED: No user found for {email}. Faking email send for security.")
+                self._send_temporary_password_email(email, temporary_password)
 
             return {"message": "If an account with that email exists, a temporary password has been sent."}
         except Exception as e:
-            print(f"UNVALIDATED: Error initiating temporary password for {email}: {e}")
             raise HTTPException(status_code=500, detail="Internal server error")
 
     def reset_password_validated(self, email: str, old_password: str, new_password: str) -> dict:

@@ -41,15 +41,18 @@ const Login = () => {
         </div>
         <h2>Login to Communication_LTD</h2>
         <div className="mock-credentials">
-          <strong>Mock Credentials:</strong>
+          <strong>Valid Example Credentials:</strong>
           <div className="credential-item">
-            <span>Email: <code>admin@example.com</code></span>
-            <span>Password: <code>Admin123!@#</code></span>
+            <span>Email: <code>test@example.com</code></span>
+            <span>Password: <code>TestPass123!@#</code></span>
           </div>
           <div className="credential-item">
-            <span>Email: <code>john.doe@example.com</code></span>
-            <span>Password: <code>Password123!</code></span>
+            <span>Email: <code>user@demo.com</code></span>
+            <span>Password: <code>MySecure1!Pass</code></span>
           </div>
+          <small style={{ display: 'block', marginTop: '0.5rem', color: '#666' }}>
+            Use credentials you registered with, or register a new account
+          </small>
         </div>
         <form onSubmit={handleSubmit} noValidate={!isValidated}>
           <div className="form-group">
