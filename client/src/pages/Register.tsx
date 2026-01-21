@@ -19,10 +19,12 @@ const Register = () => {
     setError('');
     setSuccess('');
 
-    const validation = validatePassword(formData.password);
-    if (!validation.isValid) {
-      setError(validation.errors.join(', '));
-      return;
+    if (isValidated) {
+      const validation = validatePassword(formData.password);
+      if (!validation.isValid) {
+        setError(validation.errors.join(', '));
+        return;
+      }
     }
 
     try {

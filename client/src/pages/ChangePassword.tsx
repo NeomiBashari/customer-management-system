@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { authApi } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { validatePassword, getPasswordRequirements } from '../utils/passwordValidator';
+import { useApiMode } from '../contexts/ApiModeContext';
 
 const ChangePassword = () => {
   const { user } = useAuth();
+  const { isValidated } = useApiMode();
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -22,10 +24,12 @@ const ChangePassword = () => {
       return;
     }
 
-    const validation = validatePassword(formData.newPassword);
-    if (!validation.isValid) {
-      setError(validation.errors.join(', '));
-      return;
+    if (isValidated) {
+      const validation = validatePassword(formData.newPassword);
+      if (!validation.isValid) {
+        setError(validation.errors.join(', '));
+        return;
+      }
     }
 
     try {

@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { authApi } from '../services/api';
 import { validatePassword, getPasswordRequirements } from '../utils/passwordValidator';
+import { useApiMode } from '../contexts/ApiModeContext';
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
+  const { isValidated } = useApiMode();
   const [formData, setFormData] = useState({
     email: '',
     token: '',
@@ -30,10 +32,12 @@ const ResetPassword = () => {
       return;
     }
 
-    const validation = validatePassword(formData.newPassword);
-    if (!validation.isValid) {
-      setError(validation.errors.join(', '));
-      return;
+    if (isValidated) {
+      const validation = validatePassword(formData.newPassword);
+      if (!validation.isValid) {
+        setError(validation.errors.join(', '));
+        return;
+      }
     }
 
     try {
