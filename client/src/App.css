@@ -2,3 +2,32 @@
   min-height: 100vh;
 }
 
+.mode-toggle-button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid;
+}
+
+.mode-toggle-button.validated {
+  background-color: #22c55e;
+  border-color: #16a34a;
+  color: white;
+}
+
+.mode-toggle-button.validated:hover {
+  background-color: #16a34a;
+}
+
+.mode-toggle-button.unvalidated {
+  background-color: #f97316;
+  border-color: #ea580c;
+  color: white;
+}
+
+.mode-toggle-button.unvalidated:hover {
+  background-color: #ea580c;
+}

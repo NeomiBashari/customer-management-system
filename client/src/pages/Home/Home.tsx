@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useApiMode } from '../../contexts/ApiModeContext';
 import CustomerManagement from '../CustomerManagement';
+import CustomerManagementVulnerable from '../CustomerManagement.vulnerable';
 import ChangePassword from '../ChangePassword';
 import './Home.css';
 
@@ -56,7 +57,9 @@ const Home = () => {
       </div>
 
       <div className="tab-content">
-        {activeTab === 'customers' && <CustomerManagement />}
+        {activeTab === 'customers' && (
+          isValidated ? <CustomerManagement /> : <CustomerManagementVulnerable />
+        )}
         {activeTab === 'change-password' && <ChangePassword />}
       </div>
     </div>
@@ -64,5 +67,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
