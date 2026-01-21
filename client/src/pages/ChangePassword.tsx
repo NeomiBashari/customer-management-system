@@ -48,7 +48,7 @@ const ChangePassword = () => {
   return (
     <div className="card">
       <h2>Change Password</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate={!isValidated}>
         <div className="form-group">
           <label>Current Password:</label>
           <input

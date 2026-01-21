@@ -52,7 +52,7 @@ const Register = () => {
           </button>
         </div>
         <h2>Register New User</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate={!isValidated}>
 
           <div className="form-group">
             <label>Email:</label>

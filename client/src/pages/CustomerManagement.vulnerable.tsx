@@ -69,7 +69,7 @@ const CustomerManagementVulnerable = () => {
           <br />
           Try entering: <code>&lt;img src=x onerror=alert('XSS')&gt;</code> in the First Name field.
         </p>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label>First Name:</label>
             <input

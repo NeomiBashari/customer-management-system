@@ -52,7 +52,7 @@ const ResetPassword = () => {
   return (
     <div className="card">
       <h2>Reset Password</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate={!isValidated}>
         <div className="form-group">
           <label>Email:</label>
           <input

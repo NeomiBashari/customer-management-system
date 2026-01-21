@@ -51,7 +51,7 @@ const Login = () => {
             <span>Password: <code>Password123!</code></span>
           </div>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate={!isValidated}>
           <div className="form-group">
             <label>Email:</label>
             <input
