@@ -6,7 +6,6 @@ import { useApiMode } from '../contexts/ApiModeContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
   });
@@ -28,8 +27,8 @@ const Register = () => {
 
     try {
       const response = await authApi.register(formData);
-      setSuccess(`User ${response.user.username} registered successfully!`);
-      setFormData({ username: '', email: '', password: '' });
+      setSuccess(`User ${response.user.email} registered successfully!`);
+      setFormData({ email: '', password: '' });
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -52,15 +51,7 @@ const Register = () => {
         </div>
         <h2>Register New User</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Username:</label>
-            <input
-              type="text"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              required
-            />
-          </div>
+
           <div className="form-group">
             <label>Email:</label>
             <input

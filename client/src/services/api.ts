@@ -14,7 +14,6 @@ const api = axios.create({
 });
 
 export interface RegisterData {
-  username: string;
   email: string;
   password: string;
 }
@@ -26,7 +25,7 @@ export interface UserResponse {
 }
 
 export interface LoginData {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -65,7 +64,6 @@ export const authApi = {
     return {
       user: {
         id: response.data.id,
-        username: data.username,
         email: response.data.email,
       },
     };
@@ -77,14 +75,13 @@ export const authApi = {
     }
     const mode = getRouteMode();
     const response = await api.post(`/users/login/${mode}`, {
-      email: data.username,
+      email: data.email,
       password: data.password,
     });
     return {
       user: {
         id: response.data.id || 1,
-        username: data.username,
-        email: response.data.email || data.username,
+        email: response.data.email || data.email,
       },
     };
   },

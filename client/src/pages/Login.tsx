@@ -6,7 +6,7 @@ import { useApiMode } from '../contexts/ApiModeContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: '',
   });
   const [error, setError] = useState('');
@@ -43,21 +43,21 @@ const Login = () => {
         <div className="mock-credentials">
           <strong>Mock Credentials:</strong>
           <div className="credential-item">
-            <span>Username: <code>admin</code></span>
+            <span>Email: <code>admin@example.com</code></span>
             <span>Password: <code>Admin123!@#</code></span>
           </div>
           <div className="credential-item">
-            <span>Username: <code>john.doe</code></span>
+            <span>Email: <code>john.doe@example.com</code></span>
             <span>Password: <code>Password123!</code></span>
           </div>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Username:</label>
+            <label>Email:</label>
             <input
-              type="text"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
           </div>

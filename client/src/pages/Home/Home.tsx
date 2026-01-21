@@ -24,7 +24,7 @@ const Home = () => {
         <div className="header-content">
           <h1>Communication_LTD</h1>
           <div className="user-info">
-            <span>Welcome, {user?.username}</span>
+            <span>Welcome, {user?.email}</span>
             <button
               onClick={toggleApiMode}
               className={`mode-toggle-button ${isValidated ? 'validated' : 'unvalidated'}`}

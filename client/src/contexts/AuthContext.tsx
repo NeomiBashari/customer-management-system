@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 
 interface User {
   id: number;
-  username: string;
   email: string;
 }
 

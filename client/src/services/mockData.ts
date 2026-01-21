@@ -3,7 +3,7 @@ import { securityConfig } from '../config/securityConfig';
 
 export interface MockUser {
   id: number;
-  username: string;
+
   email: string;
   password: string;
   passwordHistory: string[];
@@ -21,7 +21,7 @@ export interface MockCustomer {
 export const mockUsers: MockUser[] = [
   {
     id: 1,
-    username: 'a',
+
     email: 'a',
     password: 'a',
     passwordHistory: [],
@@ -29,7 +29,7 @@ export const mockUsers: MockUser[] = [
   },
   {
     id: 2,
-    username: 'john.doe',
+
     email: 'john.doe@example.com',
     password: 'Password123!',
     passwordHistory: [],
@@ -37,7 +37,7 @@ export const mockUsers: MockUser[] = [
   },
   {
     id: 3,
-    username: 'jane.smith',
+
     email: 'jane.smith@example.com',
     password: 'SecurePass456!',
     passwordHistory: [],
@@ -63,13 +63,13 @@ export const mockCustomers: MockCustomer[] = [
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const mockAuthApi = {
-  register: async (data: { username: string; email: string; password: string }) => {
+  register: async (data: { email: string; password: string }) => {
     await delay(500);
     
-    if (mockUsers.find((u) => u.username === data.username || u.email === data.email)) {
+    if (mockUsers.find((u) => u.email === data.email)) {
       throw {
         response: {
-          data: { error: 'Username or email already exists' },
+          data: { error: 'Email already exists' },
         },
       };
     }
@@ -84,8 +84,8 @@ export const mockAuthApi = {
     }
 
     const newUser: MockUser = {
+
       id: mockUsers.length + 1,
-      username: data.username,
       email: data.email,
       password: data.password,
       passwordHistory: [],
@@ -97,21 +97,20 @@ export const mockAuthApi = {
     return {
       user: {
         id: newUser.id,
-        username: newUser.username,
         email: newUser.email,
       },
     };
   },
 
-  login: async (data: { username: string; password: string }) => {
+  login: async (data: { email: string; password: string }) => {
     await delay(500);
 
-    const user = mockUsers.find((u) => u.username === data.username);
+    const user = mockUsers.find((u) => u.email === data.email);
 
     if (!user) {
       throw {
         response: {
-          data: { error: 'Invalid username or password' },
+          data: { error: 'Invalid email or password' },
         },
       };
     }
@@ -148,7 +147,7 @@ export const mockAuthApi = {
       throw {
         response: {
           data: {
-            error: `Invalid username or password. ${securityConfig.maxLoginAttempts - user.loginAttempts} attempts remaining`,
+            error: `Invalid email or password. ${securityConfig.maxLoginAttempts - user.loginAttempts} attempts remaining`,
           },
         },
       };
@@ -160,7 +159,7 @@ export const mockAuthApi = {
     return {
       user: {
         id: user.id,
-        username: user.username,
+
         email: user.email,
       },
     };
