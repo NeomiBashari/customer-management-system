@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authApi } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import { useApiMode } from '../contexts/ApiModeContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Login = () => {
   });
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const { isValidated, toggleApiMode } = useApiMode();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,6 +30,15 @@ const Login = () => {
   return (
     <div className="auth-page">
       <div className="card">
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+          <button
+              onClick={toggleApiMode}
+              className={`mode-toggle-button ${isValidated ? 'validated' : 'unvalidated'}`}
+              title={`Currently using ${isValidated ? 'validated' : 'unvalidated'} routes. Click to toggle.`}
+            >
+              {isValidated ? '🔒 Validated' : '🔓 Unvalidated'}
+          </button>
+        </div>
         <h2>Login to Communication_LTD</h2>
         <div className="mock-credentials">
           <strong>Mock Credentials:</strong>

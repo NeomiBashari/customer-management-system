@@ -3,27 +3,21 @@ import { customerApi } from '../services/api';
 
 interface Customer {
   id: number;
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  phone: string;
-  address: string;
-  sector: string;
-  packageId: number;
 }
 
 const CustomerManagementVulnerable = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstname: '',
+    lastname: '',
     email: '',
-    phone: '',
-    address: '',
-    sector: '',
-    packageId: 1,
   });
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [newCustomerName, setNewCustomerName] = useState('');
+  const [newCustomer, setNewCustomer] = useState<Customer | null>(null);
 
   useEffect(() => {
     loadCustomers();
@@ -45,15 +39,20 @@ const CustomerManagementVulnerable = () => {
 
     try {
       const response = await customerApi.create(formData);
-      setSuccess(`Customer "${response.customer.name}" created successfully!`);
-      setNewCustomerName(response.customer.name);
+      setSuccess('Customer created successfully!');
+      
+      // Store the response/form data to show the vulnerable display
+      setNewCustomer({
+        id: response.res_id || 0,
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        email: formData.email
+      });
+
       setFormData({
-        name: '',
+        firstname: '',
+        lastname: '',
         email: '',
-        phone: '',
-        address: '',
-        sector: '',
-        packageId: 1,
       });
       loadCustomers();
     } catch (err: any) {
@@ -63,18 +62,29 @@ const CustomerManagementVulnerable = () => {
 
   return (
     <div>
-      <div className="card">
-        <h2>Add New Customer (VULNERABLE - XSS)</h2>
+      <div className="card" style={{ border: '2px solid red' }}>
+        <h2 style={{ color: 'red' }}>Add New Customer (VULNERABLE - XSS)</h2>
         <p style={{ color: 'red', fontWeight: 'bold' }}>
-          WARNING: This page is vulnerable to XSS attacks. Try entering: &lt;script&gt;alert('XSS')&lt;/script&gt; in the name field
+          WARNING: Unvalidated Mode. This page renders HTML directly.
+          <br />
+          Try entering: <code>&lt;img src=x onerror=alert('XSS')&gt;</code> in the First Name field.
         </p>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Name:</label>
+            <label>First Name:</label>
             <input
               type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              value={formData.firstname}
+              onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Last Name:</label>
+            <input
+              type="text"
+              value={formData.lastname}
+              onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
               required
             />
           </div>
@@ -87,58 +97,23 @@ const CustomerManagementVulnerable = () => {
               required
             />
           </div>
-          <div className="form-group">
-            <label>Phone:</label>
-            <input
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Address:</label>
-            <textarea
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Sector:</label>
-            <input
-              type="text"
-              value={formData.sector}
-              onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Package ID:</label>
-            <select
-              value={formData.packageId}
-              onChange={(e) => setFormData({ ...formData, packageId: parseInt(e.target.value) })}
-              required
-            >
-              <option value={1}>1 - Basic</option>
-              <option value={2}>2 - Standard</option>
-              <option value={3}>3 - Premium</option>
-              <option value={4}>4 - Ultra</option>
-            </select>
-          </div>
           {error && <div className="error">{error}</div>}
           {success && <div className="success">{success}</div>}
-          {newCustomerName && (
+          
+          {newCustomer && (
             <div className="success">
-              <strong>New Customer Name: <span dangerouslySetInnerHTML={{ __html: newCustomerName }} /></strong>
+              <strong>New Customer Added: </strong>
+              <span dangerouslySetInnerHTML={{ __html: newCustomer.firstname }} />{' '}
+              <span dangerouslySetInnerHTML={{ __html: newCustomer.lastname }} />
             </div>
           )}
-          <button type="submit" className="btn btn-primary">Add Customer</button>
+          
+          <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#dc3545' }}>Add Customer (Unvalidated)</button>
         </form>
       </div>
 
       <div className="card">
-        <h2>All Customers (VULNERABLE - XSS)</h2>
+        <h2>All Customers (VULNERABLE VIEW)</h2>
         {customers.length === 0 ? (
           <p>No customers found</p>
         ) : (
@@ -146,22 +121,18 @@ const CustomerManagementVulnerable = () => {
             <thead>
               <tr style={{ borderBottom: '2px solid #ddd' }}>
                 <th style={{ padding: '8px', textAlign: 'left' }}>ID</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Name</th>
+                <th style={{ padding: '8px', textAlign: 'left' }}>First Name (Unsafe)</th>
+                <th style={{ padding: '8px', textAlign: 'left' }}>Last Name (Unsafe)</th>
                 <th style={{ padding: '8px', textAlign: 'left' }}>Email</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Phone</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Sector</th>
-                <th style={{ padding: '8px', textAlign: 'left' }}>Package</th>
               </tr>
             </thead>
             <tbody>
               {customers.map((customer) => (
                 <tr key={customer.id} style={{ borderBottom: '1px solid #ddd' }}>
                   <td style={{ padding: '8px' }}>{customer.id}</td>
-                  <td style={{ padding: '8px' }} dangerouslySetInnerHTML={{ __html: customer.name }} />
+                  <td style={{ padding: '8px' }} dangerouslySetInnerHTML={{ __html: customer.firstname }} />
+                  <td style={{ padding: '8px' }} dangerouslySetInnerHTML={{ __html: customer.lastname }} />
                   <td style={{ padding: '8px' }}>{customer.email}</td>
-                  <td style={{ padding: '8px' }}>{customer.phone}</td>
-                  <td style={{ padding: '8px' }}>{customer.sector}</td>
-                  <td style={{ padding: '8px' }}>{customer.packageId}</td>
                 </tr>
               ))}
             </tbody>
@@ -173,4 +144,3 @@ const CustomerManagementVulnerable = () => {
 };
 
 export default CustomerManagementVulnerable;
-
