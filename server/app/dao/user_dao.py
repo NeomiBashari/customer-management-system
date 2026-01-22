@@ -22,6 +22,19 @@ class UserDAO:
             if db:
                 db.close()
 
+    def insert_user_vulnerable(self, email, password, salt):
+        db = None
+        cursor = None
+        try:
+            db = DatabaseConnection.get_connection()
+            cursor = db.cursor()
+            query = f"INSERT INTO users (email, password_hash, salt) VALUES ('{email}', '{password}', '{salt}')"
+            cursor.execute(query)
+            db.commit()
+            return cursor.lastrowid
+        except Exception as e:
+            raise
+            
     def get_user_by_email(self, email: str) -> dict:
         db = None
         cursor = None
