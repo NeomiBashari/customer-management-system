@@ -69,16 +69,14 @@ class UserController:
 
         return UserCreateResponse(id=user_id, email=user_req.email, message="User created successfully")
 
-    def create_user_without_validation(self, user_req: UserCreateRequest) -> UserCreateResponse:
+    def create_user_without_validation(self, email, password):
         salt = secrets.token_hex(16)
-        password_hash = self.hash_password(user_req.password, salt)
-
         try:
-            user_id = self.dao.insert_user(user_req.email, password_hash, salt)
+            user_id = self.dao.insert_user_vulnerable(email, password, salt=salt)
         except Exception as e:
-            raise HTTPException(status_code=500, detail="Internal server error")
+            raise HTTPException(status_code=500, detail=str(e))
 
-        return UserCreateResponse(id=user_id, email=user_req.email, message="User created successfully")
+        return UserCreateResponse(id=user_id, email=email, message="User created successfully")
 
     def login(self, email: str, password: str) -> dict:
         try:

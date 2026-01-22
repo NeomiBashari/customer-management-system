@@ -26,6 +26,7 @@ class DatabaseConnection:
                 pool_size=10,
                 host=db_settings["host"],
                 user=db_settings["user"],
+                port=3307,
                 password=db_password,
                 database=db_settings["database"]
             )

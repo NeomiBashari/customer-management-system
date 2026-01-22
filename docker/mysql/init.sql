@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+GRANT ALL PRIVILEGES ON mydatabase.* TO 'myuser'@'%';
+
 USE customer_data;
 
 CREATE TABLE IF NOT EXISTS customers (
@@ -21,3 +23,5 @@ CREATE TABLE IF NOT EXISTS customers (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+GRANT ALL PRIVILEGES ON customer_data.* TO 'myuser'@'%';
+FLUSH PRIVILEGES; 

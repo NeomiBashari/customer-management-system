@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from models.user import UserCreateRequest, UserCreateResponse, UserLoginRequest, UserChangePasswordRequest, ForgotPasswordRequest
 from controllers.user_controller import UserController
@@ -21,9 +21,15 @@ class UserRouter:
 
     @staticmethod
     @router.post("/create/unvalidated", response_model=UserCreateResponse)
-    def create_user_without_validation(body: UserCreateRequest):
+    async def create_user_without_validation(request: Request):
         try:
-            return UserRouter.controller.create_user_without_validation(body)
+            body = await request.json()
+            email = body.get("email")
+            password = body.get("password")
+
+            return UserRouter.controller.create_user_without_validation(
+                email, password
+            )
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
