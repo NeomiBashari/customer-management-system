@@ -15,7 +15,6 @@ A full-stack customer management app with **React** (frontend) and **FastAPI** (
 ```bash
 cd docker
 docker-compose up -d
-docker exec -it my-mysql mysql -u myuser -p mydatabase
 ```
 
 ### 2. Start Server
